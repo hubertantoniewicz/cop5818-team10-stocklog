@@ -99,7 +99,19 @@ nearest cent and the rest stays with the remaining shares, so the totals always 
 
 ## Getting started
 
-Setup and run steps will be added here as the project skeleton comes together.
+You need Node.js (version 18 or newer).
+
+```bash
+git clone https://github.com/hubertantoniewicz/cop5818-team10-stocklog.git
+cd cop5818-team10-stocklog
+npm install
+npm start
+```
+
+Then open http://localhost:3000 in the browser. You can check that the server is up at
+http://localhost:3000/api/health.
+
+Database setup steps will be added once the schema is in place.
 
 ## Testing plan
 
