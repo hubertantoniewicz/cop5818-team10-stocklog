@@ -111,7 +111,9 @@ npm start
 Then open http://localhost:3000 in the browser. You can check that the server is up at
 http://localhost:3000/api/health.
 
-Database setup steps will be added once the schema is in place.
+The first time the server starts, it creates the database file `data/stocklog.db` with
+the tables from `db/schema.sql`. The file stays on your machine and is not part of the
+repository. To start over with an empty database, stop the server and delete the file.
 
 ## Testing plan
 
