@@ -115,6 +115,15 @@ The first time the server starts, it creates the database file `data/stocklog.db
 the tables from `db/schema.sql`. The file stays on your machine and is not part of the
 repository. To start over with an empty database, stop the server and delete the file.
 
+To load the sample data from the example above (AAPL and MSFT with four transactions),
+run:
+
+```bash
+npm run db:seed
+```
+
+This clears whatever is in the database and adds the sample records again.
+
 ## Testing plan
 
 Each member tests a feature that someone else built.

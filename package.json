@@ -4,7 +4,8 @@
   "description": "Simple investment portfolio tracker (COP 5818 Team 10)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "db:seed": "node db/seed.js"
   },
   "license": "ISC",
   "dependencies": {
