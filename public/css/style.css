@@ -1,0 +1,122 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+  background: #f5f6f8;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 24px;
+  background: #1f3a5f;
+  color: white;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 16px;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+section {
+  background: white;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+section:empty {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+td.number, th.number {
+  text-align: right;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 4px;
+}
+
+input, select, button {
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+button {
+  background: #1f3a5f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gain {
+  color: #1a7f37;
+}
+
+.loss {
+  color: #c62828;
+}
+
+/* Feedback messages: loading, empty, error, success */
+.message:empty {
+  display: none;
+}
+
+.message {
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: #e8eef6;
+}
+
+.message.error {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.message.success {
+  background: #e6f4ea;
+  color: #1a7f37;
+}
