@@ -74,6 +74,99 @@ Money is always stored as whole cents and shares as whole numbers, so there are 
 floating point rounding problems. On a partial sale, the cost taken out is rounded to the
 nearest cent and the rest stays with the remaining shares, so the totals always add up.
 
+## API
+
+All requests and responses use JSON. Money is always sent as whole cents
+(`17500` means $175.00) and dates as `YYYY-MM-DD`. When something goes wrong, the server
+sends back a status code and a message:
+
+```json
+{ "error": "Cannot sell 20 shares of AAPL, only 15 held in Fidelity" }
+```
+
+- `400` – the input is missing or invalid
+- `404` – the ticker or record does not exist
+- `409` – the ticker already exists
+
+### Securities
+
+| Method | Path | What it does |
+|--------|------|--------------|
+| GET | `/api/securities` | List all tickers with their current price |
+| POST | `/api/securities` | Add a ticker |
+| PUT | `/api/securities/:ticker` | Change the current price of a ticker |
+
+A security looks like this (POST sends all three fields, PUT sends only
+`currentPriceCents`):
+
+```json
+{ "ticker": "AAPL", "name": "Apple Inc.", "currentPriceCents": 17000 }
+```
+
+Tickers are saved in upper case. The price has to be a whole number above 0.
+
+### Transactions
+
+| Method | Path | What it does |
+|--------|------|--------------|
+| GET | `/api/transactions` | List all transactions, newest first |
+| POST | `/api/transactions` | Record a BUY or SELL |
+
+POST body:
+
+```json
+{
+  "ticker": "AAPL",
+  "type": "SELL",
+  "tradeDate": "2026-10-01",
+  "shares": 5,
+  "priceCents": 17500,
+  "account": "Fidelity",
+  "comment": "Taking some profit"
+}
+```
+
+The response (and each item in the GET list) is the same object with its `id` added.
+`comment` is optional. The ticker must already exist, `type` is `BUY` or `SELL`, and
+`shares` and `priceCents` are whole numbers above 0. A SELL is rejected with `400` if the
+account does not hold enough shares of that ticker.
+
+### Portfolio summary
+
+`GET /api/portfolio/summary` works everything out from the stored transactions and
+current prices:
+
+```json
+{
+  "holdings": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "shares": 10,
+      "avgCostCents": 16000,
+      "costBasisCents": 160000,
+      "currentPriceCents": 17000,
+      "marketValueCents": 170000,
+      "unrealizedGainCents": 10000,
+      "unrealizedGainPct": 6.25,
+      "realizedGainCents": 7500,
+      "allocationPct": 50.3
+    }
+  ],
+  "totals": {
+    "costBasisCents": 320000,
+    "marketValueCents": 338000,
+    "unrealizedGainCents": 18000,
+    "unrealizedGainPct": 5.63,
+    "realizedGainCents": 7500
+  }
+}
+```
+
+Holdings are combined per ticker across all accounts, and only tickers with shares left
+are listed. Realized gains from tickers that were sold completely still count in the
+totals. Percentages are rounded to two decimals.
+
 ## Team and responsibilities
 
 | Task | Owner | Target |
