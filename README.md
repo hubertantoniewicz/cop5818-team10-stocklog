@@ -74,6 +74,20 @@ Money is always stored as whole cents and shares as whole numbers, so there are 
 floating point rounding problems. On a partial sale, the cost taken out is rounded to the
 nearest cent and the rest stays with the remaining shares, so the totals always add up.
 
+## Project structure
+
+```
+server.js              Express app, mounts the routes
+db/schema.sql          table definitions
+db/database.js         opens the SQLite file and creates the tables
+db/seed.js             sample data (npm run db:seed)
+routes/securities.js   /api/securities
+routes/transactions.js /api/transactions
+routes/portfolio.js    /api/portfolio
+public/                the three pages, CSS and browser JavaScript
+public/js/api.js       shared helpers: API calls, money formatting, messages
+```
+
 ## API
 
 All requests and responses use JSON. Money is always sent as whole cents
