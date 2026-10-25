@@ -120,3 +120,30 @@ button {
   background: #e6f4ea;
   color: #1a7f37;
 }
+
+/* Dashboard totals */
+#totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card {
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.card-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.card-value {
+  font-size: 20px;
+  font-weight: bold;
+}
