@@ -41,7 +41,18 @@ router.post('/', (req, res) => {
 
 // PUT /api/securities/:ticker - update the current price of a ticker
 router.put('/:ticker', (req, res) => {
-  res.status(501).json({ error: 'Not implemented yet' });
+  const ticker = req.params.ticker.toUpperCase();
+  const row = db.prepare('SELECT * FROM securities WHERE ticker = ?').get(ticker);
+  if (!row) {
+    return res.status(404).json({ error: `Ticker ${ticker} not found` });
+  }
+  const { currentPriceCents } = req.body || {};
+  if (!Number.isInteger(currentPriceCents) || currentPriceCents <= 0) {
+    return res.status(400).json({ error: 'Current price must be a positive whole number of cents.' });
+  }
+  db.prepare('UPDATE securities SET current_price_cents = ? WHERE ticker = ?')
+    .run(currentPriceCents, ticker);
+  res.json(toSecurity(db.prepare('SELECT * FROM securities WHERE ticker = ?').get(ticker)));
 });
 
 module.exports = router;
