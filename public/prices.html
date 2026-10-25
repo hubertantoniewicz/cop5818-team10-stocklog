@@ -20,7 +20,21 @@
     <h1>Prices</h1>
     <p id="message" class="message" role="status" aria-live="polite"></p>
 
-    <section id="add-security"></section>
+    <section id="add-security">
+      <h2>Add a ticker</h2>
+      <form id="add-security-form">
+        <label for="ticker">Ticker
+          <input id="ticker" name="ticker" type="text" maxlength="10" required>
+        </label>
+        <label for="company-name">Company name
+          <input id="company-name" name="name" type="text" required>
+        </label>
+        <label for="current-price">Current price ($)
+          <input id="current-price" name="price" type="text" inputmode="decimal" required>
+        </label>
+        <button type="submit">Add ticker</button>
+      </form>
+    </section>
     <section id="price-list"></section>
   </main>
 
