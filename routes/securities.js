@@ -18,8 +18,8 @@ router.post('/', (req, res) => {
   const { ticker: rawTicker, name: rawName, currentPriceCents } = req.body || {};
   const ticker = typeof rawTicker === 'string' ? rawTicker.trim().toUpperCase() : '';
   const name = typeof rawName === 'string' ? rawName.trim() : '';
-  if (!/^[A-Z.]{1,10}$/.test(ticker)) {
-    return res.status(400).json({ error: 'Ticker must contain 1 to 10 letters or dots.' });
+  if (!/^[A-Z][A-Z.]{0,9}$/.test(ticker)) {
+    return res.status(400).json({ error: 'Ticker must start with a letter and have at most 10 letters or dots.' });
   }
   if (!name) {
     return res.status(400).json({ error: 'Company name must be a non-empty string.' });
