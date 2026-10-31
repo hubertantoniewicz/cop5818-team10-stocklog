@@ -77,6 +77,19 @@ router.post('/', (req, res) => {
   }
 
   const { ticker, type, tradeDate, shares, priceCents, account, comment } = body;
+
+  // Sell rule: you can't sell more shares than this account holds
+  if (type === 'SELL') {
+    const { held } = db.prepare(
+      `SELECT COALESCE(SUM(CASE WHEN type = 'BUY' THEN shares ELSE -shares END), 0) AS held
+       FROM transactions WHERE ticker = ? AND account = ?`
+    ).get(ticker, account);
+    if (shares > held) {
+      return res.status(400).json({
+        error: `Cannot sell ${shares} shares of ${ticker}, only ${held} held in ${account}`,
+      });
+    }
+  }
   const info = db.prepare(
     `INSERT INTO transactions (ticker, type, trade_date, shares, price_cents, account, comment)
      VALUES (?, ?, ?, ?, ?, ?, ?)`
