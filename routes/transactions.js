@@ -85,15 +85,28 @@ router.post('/', (req, res) => {
 
   const { ticker, type, tradeDate, shares, priceCents, account, comment } = body;
 
-  // Sell rule: you can't sell more shares than this account held on the trade date
+  // Sell rule: go through this account's trades in the same order as the portfolio
+  // summary (trade_date, id). The new sell goes after the trades already on its date,
+  // and the shares held must never drop below zero from there on, so a back-dated
+  // sell can't break a sell that is already saved
   if (type === 'SELL') {
-    const { held } = db.prepare(
-      `SELECT COALESCE(SUM(CASE WHEN type = 'BUY' THEN shares ELSE -shares END), 0) AS held
-       FROM transactions WHERE ticker = ? AND account = ? AND trade_date <= ?`
-    ).get(ticker, account, tradeDate);
+    const trades = db.prepare(
+      `SELECT trade_date, type, shares FROM transactions
+       WHERE ticker = ? AND account = ? ORDER BY trade_date, id`
+    ).all(ticker, account);
+
+    let running = 0;
+    let held = null; // fewest shares held from the new sell onwards
+    for (const trade of trades) {
+      if (trade.trade_date > tradeDate && held === null) held = running;
+      running += trade.type === 'BUY' ? trade.shares : -trade.shares;
+      if (trade.trade_date > tradeDate) held = Math.min(held, running);
+    }
+    if (held === null) held = running;
+
     if (shares > held) {
       return res.status(400).json({
-        error: `Cannot sell ${shares} shares of ${ticker}, only ${held} held in ${account}`,
+        error: `Cannot sell ${shares} shares of ${ticker}, only ${held} available in ${account} on ${tradeDate}`,
       });
     }
   }
