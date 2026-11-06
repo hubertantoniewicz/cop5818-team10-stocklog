@@ -147,3 +147,8 @@ button {
   font-size: 20px;
   font-weight: bold;
 }
+
+/* Lets the holdings table scroll sideways on a narrow screen */
+#holdings {
+  overflow-x: auto;
+}

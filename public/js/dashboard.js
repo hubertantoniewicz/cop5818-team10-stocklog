@@ -43,6 +43,54 @@ function renderTotals(totals) {
   }
 }
 
+// Same columns as the example table in the README, plus realized gain
+function renderHoldings(holdings) {
+  const section = document.getElementById('holdings');
+  section.textContent = '';
+  if (holdings.length === 0) return;
+
+  const heading = document.createElement('h2');
+  heading.textContent = 'Holdings';
+  const table = document.createElement('table');
+  const head = table.createTHead().insertRow();
+  const columns = ['Holding', 'Shares', 'Avg cost', 'Cost basis', 'Market value', 'Unrealized', 'Realized', 'Allocation'];
+  for (const title of columns) {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = title;
+    if (title !== 'Holding') th.className = 'number';
+    head.append(th);
+  }
+
+  const body = table.createTBody();
+  for (const h of holdings) {
+    const row = body.insertRow();
+    const holding = row.insertCell();
+    holding.textContent = h.ticker;
+    holding.title = h.name;
+
+    const cells = [
+      { text: String(h.shares) },
+      { text: formatCents(h.avgCostCents) },
+      { text: formatCents(h.costBasisCents) },
+      { text: formatCents(h.marketValueCents) },
+      {
+        text: `${formatGain(h.unrealizedGainCents)} (${formatPct(h.unrealizedGainPct)})`,
+        className: gainClass(h.unrealizedGainCents),
+      },
+      { text: formatGain(h.realizedGainCents), className: gainClass(h.realizedGainCents) },
+      { text: h.allocationPct.toFixed(2) + '%' },
+    ];
+    for (const cell of cells) {
+      const td = row.insertCell();
+      td.className = 'number ' + (cell.className || '');
+      td.textContent = cell.text;
+    }
+  }
+
+  section.append(heading, table);
+}
+
 async function loadSummary() {
   showMessage('Loading portfolio…');
   try {
@@ -53,6 +101,7 @@ async function loadSummary() {
       clearMessage();
     }
     renderTotals(summary.totals);
+    renderHoldings(summary.holdings);
   } catch (err) {
     showMessage(err.message, 'error');
   }
