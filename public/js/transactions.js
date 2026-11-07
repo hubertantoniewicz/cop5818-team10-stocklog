@@ -170,14 +170,102 @@
     }
   }
 
-  // Temporary handler: saving is implemented in stage 3.
-  form.addEventListener('submit', event => {
+    let saving = false;
+
+  form.addEventListener('submit', async event => {
     event.preventDefault();
 
-    showMessage(
-      'Saving will be enabled in the next stage.',
-      'info'
-    );
+    if (saving || fields.disabled) {
+      return;
+    }
+
+    clearMessage();
+
+    const ticker = byId('ticker').value;
+    const type = byId('trade-type').value;
+    const tradeDate = byId('trade-date').value;
+    const shares = Number(byId('shares').value);
+    const priceCents = dollarsToCents(byId('price').value);
+    const account = byId('account').value.trim();
+    const comment = byId('comment').value.trim();
+
+    if (
+      !ticker ||
+      !['BUY', 'SELL'].includes(type) ||
+      !tradeDate ||
+      !byId('trade-date').validity.valid
+    ) {
+      showMessage(
+        'Choose a ticker, transaction type, and valid date.',
+        'error'
+      );
+      return;
+    }
+
+    if (!Number.isSafeInteger(shares) || shares <= 0) {
+      showMessage(
+        'Shares must be a whole number above 0.',
+        'error'
+      );
+      return;
+    }
+
+    if (!Number.isSafeInteger(priceCents) || priceCents <= 0) {
+      showMessage(
+        'Enter a price above $0 with no more than two decimal places.',
+        'error'
+      );
+      return;
+    }
+
+    if (!Number.isSafeInteger(shares * priceCents)) {
+      showMessage(
+        'The transaction total is too large. Enter smaller values.',
+        'error'
+      );
+      return;
+    }
+
+    if (!account) {
+      showMessage('Enter an account name.', 'error');
+      return;
+    }
+
+    const transaction = {
+      ticker,
+      type,
+      tradeDate,
+      shares,
+      priceCents,
+      account,
+      comment
+    };
+
+    saving = true;
+    fields.disabled = true;
+    saveButton.textContent = 'Saving…';
+    showMessage('Saving…', 'info');
+
+    try {
+      await api('POST', '/api/transactions', transaction);
+
+      showMessage(
+        `Saved: ${type} ${shares} ${ticker} @ ${formatCents(priceCents)} in ${account}.`,
+        'success'
+      );
+
+      byId('shares').value = '';
+      byId('price').value = '';
+      byId('comment').value = '';
+
+      await loadHistory();
+    } catch (error) {
+      showMessage(error.message, 'error');
+    } finally {
+      saving = false;
+      fields.disabled = false;
+      saveButton.textContent = 'Save transaction';
+    }
   });
 
   // STARTUP
