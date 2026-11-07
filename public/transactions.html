@@ -17,12 +17,23 @@
   </header>
 
   <main>
-    <h1>Transactions</h1>
-    <p id="message" class="message"></p>
+  <h1>Transactions</h1>
 
-    <section id="transaction-form"></section>
-    <section id="history"></section>
-  </main>
+  <p
+    id="message"
+    class="message"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+  <section id="history" aria-labelledby="history-heading">
+    <h2 id="history-heading">Transaction history</h2>
+
+    <div id="history-content" aria-live="polite">
+      Loading transactions…
+    </div>
+  </section>
+</main>
 
   <script src="js/api.js"></script>
   <script src="js/transactions.js"></script>
