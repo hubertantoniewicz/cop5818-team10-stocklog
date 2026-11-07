@@ -170,7 +170,7 @@
     }
   }
 
-    let saving = false;
+  let saving = false;
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
