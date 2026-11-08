@@ -18,82 +18,66 @@
 
   <main>
     <h1>Transactions</h1>
-    <p id="message"
-       class="message"
-       role="status"
-       aria-live="polite"
-    ></p>
+    <p id="message" class="message" role="status" aria-live="polite"></p>
 
     <section aria-labelledby="form-heading">
-  <h2 id="form-heading">Record a transaction</h2>
+      <h2 id="form-heading">Record a transaction</h2>
 
-  <p id="ticker-status" role="status">Loading tickers…</p>
+      <p id="ticker-status" role="status">Loading tickers…</p>
 
-  <form id="transaction-form" novalidate>
-    <fieldset id="transaction-fields" disabled>
-      <legend>Trade details</legend>
+      <form id="transaction-form" novalidate>
+        <fieldset id="transaction-fields" disabled>
+          <legend>Trade details</legend>
 
-      <p>
-        <label for="ticker">Ticker</label>
-        <select id="ticker" required></select>
-      </p>
+          <p>
+            <label for="ticker">Ticker</label>
+            <select id="ticker" required></select>
+          </p>
 
-      <p>
-        <label for="trade-type">Type</label>
-        <select id="trade-type">
-          <option value="BUY">BUY</option>
-          <option value="SELL">SELL</option>
-        </select>
-      </p>
+          <p>
+            <label for="trade-type">Type</label>
+            <select id="trade-type">
+              <option value="BUY">BUY</option>
+              <option value="SELL">SELL</option>
+            </select>
+          </p>
 
-      <p>
-        <label for="trade-date">Date</label>
-        <input id="trade-date" type="date" required>
-      </p>
+          <p>
+            <label for="trade-date">Date</label>
+            <input id="trade-date" type="date" required>
+          </p>
 
-      <p>
-        <label for="shares">Shares</label>
-        <input id="shares" type="number" min="1" step="1" required>
-      </p>
+          <p>
+            <label for="shares">Shares</label>
+            <input id="shares" type="number" min="1" step="1" required>
+          </p>
 
-      <p>
-        <label for="price">Price per share ($)</label>
-        <input
-          id="price"
-          type="text"
-          inputmode="decimal"
-          placeholder="175.00"
-          required
-        >
-      </p>
+          <p>
+            <label for="price">Price per share ($)</label>
+            <input id="price" type="text" inputmode="decimal" placeholder="175.00" required>
+          </p>
 
-      <p>
-        <label for="account">Account</label>
-        <input id="account" type="text" list="account-names" required>
-        <datalist id="account-names"></datalist>
-      </p>
+          <p>
+            <label for="account">Account</label>
+            <input id="account" type="text" list="account-names" required>
+            <datalist id="account-names"></datalist>
+          </p>
 
-      <p>
-        <label for="comment">Comment (optional)</label>
-        <textarea id="comment" rows="3"></textarea>
-      </p>
+          <p class="comment-field">
+            <label for="comment">Comment (optional)</label>
+            <textarea id="comment" rows="3"></textarea>
+          </p>
 
-      <button id="save-transaction" type="submit">
-        Save transaction
-      </button>
-    </fieldset>
-  </form>
-</section>
+          <button id="save-transaction" type="submit">Save transaction</button>
+        </fieldset>
+      </form>
+    </section>
 
-     <section
-    id="history"
-    aria-labelledby="history-heading"
-    aria-live="polite"
-  >
-    <h2 id="history-heading">Transaction history</h2>
-    <div id="history-content">Loading transactions…</div>
-  </section>
-</main>
+    <section id="history" aria-labelledby="history-heading" aria-live="polite">
+      <h2 id="history-heading">Transaction history</h2>
+      <div id="history-content">Loading transactions…</div>
+    </section>
+  </main>
 
   <script src="js/api.js"></script>
   <script src="js/transactions.js"></script>

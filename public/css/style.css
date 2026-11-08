@@ -152,3 +152,38 @@ button {
 #holdings {
   overflow-x: auto;
 }
+
+/* Transactions form: fields in a row like the Prices form, comment on its own line */
+#transaction-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+#transaction-fields legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+#transaction-fields p {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  font-size: 14px;
+}
+
+#transaction-fields .comment-field {
+  flex-basis: 100%;
+}
+
+/* Lets the history table scroll sideways on a narrow screen */
+#history-content {
+  overflow-x: auto;
+}
