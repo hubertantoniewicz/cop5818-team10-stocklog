@@ -1,7 +1,7 @@
 # Dependencies
 node_modules/
 
-# SQLite database (created locally by npm run db:init)
+# SQLite database (created locally when the server starts)
 data/*.db
 data/*.db-journal
 data/*.db-wal
