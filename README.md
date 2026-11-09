@@ -84,6 +84,8 @@ db/seed.js             sample data (npm run db:seed)
 routes/securities.js   /api/securities
 routes/transactions.js /api/transactions
 routes/portfolio.js    /api/portfolio
+lib/portfolio.js       average cost, gains, allocation and totals
+tests/                 tests for lib/portfolio.js (npm test)
 public/                the three pages, CSS and browser JavaScript
 public/js/api.js       shared helpers: API calls, money formatting, messages
 ```
@@ -95,7 +97,7 @@ All requests and responses use JSON. Money is always sent as whole cents
 sends back a status code and a message:
 
 ```json
-{ "error": "Cannot sell 20 shares of AAPL, only 15 held in Fidelity" }
+{ "error": "Cannot sell 20 shares of AAPL, only 15 available in Fidelity on 2026-10-01" }
 ```
 
 - `400` – the input is missing or invalid
@@ -231,9 +233,16 @@ npm run db:seed
 
 This clears whatever is in the database and adds the sample records again.
 
+To run the tests for the portfolio calculations:
+
+```bash
+npm test
+```
+
 ## Testing plan
 
-Each member tests a feature that someone else built.
+Each member tests a feature that someone else built. Step-by-step instructions for each
+check are in [TESTING.md](TESTING.md), and the results go in issue #3.
 
 | # | Check | Input or action | Expected result | Owner |
 |---|-------|-----------------|-----------------|-------|
