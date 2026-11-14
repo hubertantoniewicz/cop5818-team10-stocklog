@@ -251,6 +251,9 @@ check are in [TESTING.md](TESTING.md), and the results go in issue #3.
 | 3 | Invalid input | Sell 20 AAPL with 15 held; buy at a price of -5 | 400 response with a clear message; no row added | Alexander |
 | 4 | Browser to API to DB | Add MSFT @ $420 and buy 4 @ $400 through the UI | Shows in history and on the Dashboard; row saved in SQLite | Michael |
 | 5 | Persistence after restart | Restart the server and reload the Dashboard | Same holdings and totals as before | Hubert |
+| 6 | Required field empty | Buy with no account; add a ticker with no name | 400 with a message naming the field; nothing saved | Hubert |
+| 7 | Boundary | With 10 AAPL held, sell 11, then sell exactly 10 @ $175; price of $0 | 11 rejected; exactly 10 accepted (leaves 0), realized becomes +$225.00; price $0 rejected | Hubert |
+| 8 | Empty result and missing record | Empty database; update the price of an unknown ticker | Dashboard shows "No holdings yet" and $0.00 totals; 404 for the unknown ticker | Hubert |
 
 ## Known limitations
 
