@@ -91,6 +91,51 @@ database.
 
 **Expected:** the same holdings and totals as before the restart.
 
+## Extra checks 6 to 8 (final report)
+
+These cover the remaining categories from the final project rubric. Start each one from an
+empty database as described above. The curl commands work in Terminal on Mac, and in
+Command Prompt on Windows.
+
+### Check 6, Required field empty
+
+1. Prices page: add `AAPL`, `Apple Inc.`, `170`.
+2. Transactions page: BUY 10 AAPL at `150`, leave **Account** empty, and click Save.
+   The page should show *"Enter an account name."* and nothing is saved.
+3. The server checks it too:
+
+   ```bash
+   curl -i -X POST http://localhost:3000/api/transactions -H "Content-Type: application/json" -d "{\"ticker\":\"AAPL\",\"type\":\"BUY\",\"tradeDate\":\"2026-09-02\",\"shares\":10,\"priceCents\":15000,\"account\":\"\"}"
+   curl -i -X POST http://localhost:3000/api/securities -H "Content-Type: application/json" -d "{\"ticker\":\"MSFT\",\"name\":\"\",\"currentPriceCents\":42000}"
+   ```
+
+**Expected:** `400` "Account is required" and `400` "Company name must be a non-empty
+string.", and the history is still empty.
+
+### Check 7, Boundary: selling exactly the shares held
+
+1. Do Check 1 and Check 2 first, so Fidelity holds 10 AAPL.
+2. Transactions page: SELL **11** AAPL at `175` on 2026-10-20, account Fidelity.
+   Rejected: *"Cannot sell 11 shares of AAPL, only 10 available in Fidelity on 2026-10-20"*.
+3. SELL exactly **10** AAPL at `175` on 2026-10-20, account Fidelity. This is accepted,
+   because it leaves 0 shares, not a negative number.
+4. Try a BUY with the price `0`. Rejected, because prices must be above $0.
+
+**Expected:** AAPL is no longer listed in the holdings, and the total realized gain is
++$225.00 ($75.00 from the first sale plus 10 × ($175 − $160) = $150.00).
+
+### Check 8, Empty result and missing record
+
+1. With an empty database, open the Dashboard. It should show *"No holdings yet. Record
+   your first buy on the Transactions page."* and $0.00 totals.
+2. Update the price of a ticker that doesn't exist:
+
+   ```bash
+   curl -i -X PUT http://localhost:3000/api/securities/ZZZZ -H "Content-Type: application/json" -d "{\"currentPriceCents\":100}"
+   ```
+
+**Expected:** `404` "Ticker ZZZZ not found".
+
 ## Posting your result
 
 Comment on issue #3 with something like this, and add a screenshot of the Dashboard or
