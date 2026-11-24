@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Simple investment portfolio tracker (COP 5818 Team 10)",
   "main": "server.js",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node server.js",
     "db:seed": "node db/seed.js",
