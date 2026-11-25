@@ -208,7 +208,18 @@ totals. Percentages are rounded to two decimals.
 
 ## Getting started
 
-You need Node.js (version 18 or newer).
+### Prerequisites
+
+- **Node.js 22 or later** (the 22 or 24 LTS version from https://nodejs.org is
+  recommended). Check with `node -v`. The SQLite package we use (`better-sqlite3` 13)
+  does not support older versions, and `npm install` stops with an "Unsupported engine"
+  error on them.
+- Git, or the project ZIP file.
+- No C++ compiler, Python or Visual Studio Build Tools are needed. `better-sqlite3`
+  includes ready-made binaries for Windows, Mac and Linux (x64 and arm64), and the
+  project's `.npmrc` (`ignore-scripts=true`) stops npm from trying to compile it.
+
+### Mac or Linux
 
 ```bash
 git clone https://github.com/hubertantoniewicz/cop5818-team10-stocklog.git
@@ -217,7 +228,50 @@ npm install
 npm start
 ```
 
-Then open http://localhost:3000 in the browser. You can check that the server is up at
+### Windows
+
+1. Install Node.js 22 or 24 LTS with the Windows Installer (.msi) from
+   https://nodejs.org. The default options are fine; you don't need to tick
+   "Automatically install the necessary tools" (that is only for compiling native
+   modules).
+2. Open a **new** Command Prompt or PowerShell window and check the version:
+
+   ```
+   node -v
+   ```
+
+   It should print v22 or higher.
+3. Get the project, either by cloning it:
+
+   ```
+   git clone https://github.com/hubertantoniewicz/cop5818-team10-stocklog.git
+   cd cop5818-team10-stocklog
+   ```
+
+   or by unzipping the submitted ZIP and running `cd` into the unzipped folder. Make sure
+   the `.npmrc` file is in that folder (it is hidden in File Explorer by default; `dir /a`
+   in Command Prompt shows it).
+4. Install the packages, load the sample data and start the server:
+
+   ```
+   npm install
+   npm run db:seed
+   npm start
+   ```
+
+5. Open http://localhost:3000. Stop the server with Ctrl+C.
+
+To start over with an empty database on Windows, stop the server and run
+`del data\stocklog.db`.
+
+**If `npm install` still shows `gyp ERR!` or asks for Visual Studio**, npm is trying to
+compile `better-sqlite3`, which means the `.npmrc` file is missing. Delete the
+`node_modules` folder and run `npm install --ignore-scripts` instead. If it says
+"Unsupported engine", install Node.js 22 or later first.
+
+### After starting
+
+Open http://localhost:3000 in the browser. You can check that the server is up at
 http://localhost:3000/api/health.
 
 The first time the server starts, it creates the database file `data/stocklog.db` with
